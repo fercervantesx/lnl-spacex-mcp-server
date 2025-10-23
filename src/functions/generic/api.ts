@@ -19,3 +19,26 @@ export async function makeSpaceXApiRequest<T>(url: string): Promise<T | null> {
     }
 }
 
+export async function makeSpaceXApiQueryRequest<T>(url: string, queryBody: any): Promise<T | null> {
+    const headers = {
+        "User-Agent": "spacex-mcp-server",
+        "Content-Type": "application/json",
+    }
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers,
+            body: JSON.stringify(queryBody),
+        });
+        if (!response.ok) {
+            return null;
+        }
+        const data = await response.json();
+        return data as T;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return null;
+    }
+}
+
